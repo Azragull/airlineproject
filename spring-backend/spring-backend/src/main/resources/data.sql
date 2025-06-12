@@ -1,4 +1,4 @@
-INSERT INTO Users (UserID, Name, Email, Password, Role) VALUES
+INSERT INTO users (UserID, Name, Email, Password, Role) VALUES
 (1, 'Ali Yağız İnce', 'ali@example.com', '1111111', 'admin'),
 (2, 'Öykü Yüksel', 'oyku@example.com', '2222222', 'customer'),
 (3, 'Azra Gül', 'azra@example.com', '3333333', 'admin'),
@@ -14,7 +14,7 @@ INSERT INTO flights (FlightID, Airline, Departure, Destination, Date, Time, Pric
 (5, 'Turkish Airlines', 'Istanbul', 'New York', '2025-06-25', '23:00:00', 10500.00, 30)
 ON CONFLICT (FlightID) DO NOTHING;
 
-INSERT INTO Bookings (BookingID, UserID, FlightID, PaymentStatus, BookingDate) VALUES
+INSERT INTO bookings (BookingID, UserID, FlightID, PaymentStatus, BookingDate) VALUES
 (1, 2, 1, 'Paid', '2025-06-01'),
 (2, 3, 2, 'Pending', '2025-06-01'),
 (3, 4, 3, 'Paid', '2025-06-02'),
@@ -30,7 +30,7 @@ INSERT INTO payments (PaymentID, BookingID, UserID, Amount, Status, PaymentMetho
 (5, 5, 2, 3500.00, 'Completed', 'PayPal')
 ON CONFLICT (PaymentID) DO NOTHING;
 
-INSERT INTO Airports (AirportID, Name, Location, Code) VALUES
+INSERT INTO airports (AirportID, Name, Location, Code) VALUES
 (1, 'Istanbul Airport', 'Istanbul', 'IST'),
 (2, 'Berlin Brandenburg', 'Berlin', 'BER'),
 (3, 'Amsterdam Schiphol', 'Amsterdam', 'AMS'),
@@ -38,7 +38,7 @@ INSERT INTO Airports (AirportID, Name, Location, Code) VALUES
 (5, 'John F. Kennedy Airport', 'New York', 'JFK')
 ON CONFLICT (AirportID) DO NOTHING;
 
-INSERT INTO Tickets (TicketID, BookingID, SeatNumber, Class, Status) VALUES
+INSERT INTO tickets (TicketID, BookingID, SeatNumber, Class, Status) VALUES
 (1, 1, '12A', 'Economy', 'Confirmed'),
 (2, 2, '15B', 'Business', 'Reserved'),
 (3, 3, '21C', 'Economy', 'Confirmed'),
@@ -46,7 +46,7 @@ INSERT INTO Tickets (TicketID, BookingID, SeatNumber, Class, Status) VALUES
 (5, 5, '5E', 'Business', 'Confirmed')
 ON CONFLICT (TicketID) DO NOTHING;
 
-INSERT INTO Passengers (PassengerID, BookingID, Name, Age, PassportNumber) VALUES
+INSERT INTO passengers (PassengerID, BookingID, Name, Age, PassportNumber) VALUES
 (1, 1, 'Öykü Yüksel', 22, 'P12345678'),
 (2, 2, 'Azra Gül', 21, 'P87654321'),
 (3, 3, 'Belinay Öz', 30, 'P34567891'),
@@ -54,7 +54,7 @@ INSERT INTO Passengers (PassengerID, BookingID, Name, Age, PassportNumber) VALUE
 (5, 5, 'Ali Yağız İnce', 25, 'P19283746')
 ON CONFLICT (PassengerID) DO NOTHING;
 
-INSERT INTO FlightStatus (StatusID, FlightID, DepartureTime, ArrivalTime, Status) VALUES
+INSERT INTO flight_status (StatusID, FlightID, DepartureTime, ArrivalTime, Status) VALUES
 (1, 1, '08:30:00', '11:00:00', 'On Time'),
 (2, 2, '12:00:00', '14:30:00', 'Delayed'),
 (3, 3, '14:00:00', '16:30:00', 'On Time'),
@@ -62,7 +62,7 @@ INSERT INTO FlightStatus (StatusID, FlightID, DepartureTime, ArrivalTime, Status
 (5, 5, '23:00:00', '06:30:00', 'Cancelled')
 ON CONFLICT (StatusID) DO NOTHING;
 
-INSERT INTO BaggageAllowance (BaggageID, FlightID, AllowedWeight, ExtraChargePerKg) VALUES
+INSERT INTO baggage_allowance (BaggageID, FlightID, AllowedWeight, ExtraChargePerKg) VALUES
 (1, 1, 20, 15.00),
 (2, 2, 15, 20.00),
 (3, 3, 23, 18.00),
@@ -70,7 +70,7 @@ INSERT INTO BaggageAllowance (BaggageID, FlightID, AllowedWeight, ExtraChargePer
 (5, 5, 25, 25.00)
 ON CONFLICT (BaggageID) DO NOTHING;
 
-INSERT INTO SeatClasses (ClassID, FlightID, ClassType, PriceMultiplier) VALUES
+INSERT INTO seat_classes (ClassID, FlightID, ClassType, PriceMultiplier) VALUES
 (1, 1, 'Economy', 1.0),
 (2, 1, 'Business', 1.5),
 (3, 2, 'Economy', 1.0),
