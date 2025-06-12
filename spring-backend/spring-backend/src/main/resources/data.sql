@@ -6,7 +6,7 @@ INSERT INTO Users (UserID, Name, Email, Password, Role) VALUES
 (5, 'Ece Uzal', 'ece@example.com', '5555555', 'customer')
 ON CONFLICT (UserID) DO NOTHING;
 
-INSERT INTO Flights (FlightID, Airline, Departure, Destination, Date, Time, Price, seats_available) VALUES
+INSERT INTO flights (FlightID, Airline, Departure, Destination, Date, Time, Price, seats_available) VALUES
 (1, 'Turkish Airlines', 'Istanbul', 'Berlin', '2025-06-15', '08:30:00', 4500.00, 50),
 (2, 'Pegasus', 'Ankara', 'Amsterdam', '2025-06-16', '12:00:00', 3200.00, 40),
 (3, 'SunExpress', 'Izmir', 'London', '2025-06-20', '14:00:00', 1100.00, 60),
