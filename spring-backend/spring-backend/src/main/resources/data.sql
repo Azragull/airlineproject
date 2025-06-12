@@ -22,7 +22,7 @@ INSERT INTO Bookings (BookingID, UserID, FlightID, PaymentStatus, BookingDate) V
 (5, 2, 5, 'Paid', '2025-06-04')
 ON CONFLICT (BookingID) DO NOTHING;
 
-INSERT INTO Payments (PaymentID, BookingID, UserID, Amount, Status, PaymentMethod) VALUES
+INSERT INTO payments (PaymentID, BookingID, UserID, Amount, Status, PaymentMethod) VALUES
 (1, 1, 2, 1500.00, 'Completed', 'Credit Card'),
 (2, 2, 3, 1200.00, 'Pending', 'PayPal'),
 (3, 3, 4, 1100.00, 'Completed', 'Bank Transfer'),
