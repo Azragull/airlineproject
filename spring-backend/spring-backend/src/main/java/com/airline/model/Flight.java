@@ -14,6 +14,7 @@ public class Flight {
     private String date;
     private String time;
     private double price;
+    @Column(name = "seats_available")
     private int seatsAvailable;
 
     // Getter ve Setterlar
