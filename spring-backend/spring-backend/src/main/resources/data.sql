@@ -38,7 +38,7 @@ INSERT INTO airports (AirportID, Name, Location, Code) VALUES
 (5, 'John F. Kennedy Airport', 'New York', 'JFK')
 ON CONFLICT (AirportID) DO NOTHING;
 
-INSERT INTO tickets (TicketID, BookingID, SeatNumber, Class, Status) VALUES
+INSERT INTO tickets (TicketID, BookingID, SeatNumber, class_type, Status) VALUES
 (1, 1, '12A', 'Economy', 'Confirmed'),
 (2, 2, '15B', 'Business', 'Reserved'),
 (3, 3, '21C', 'Economy', 'Confirmed'),

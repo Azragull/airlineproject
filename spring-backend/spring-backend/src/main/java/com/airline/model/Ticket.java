@@ -10,7 +10,10 @@ public class Ticket {
     private Long ticketID;
     private Long bookingID;
     private String seatNumber;
+    
+    @Column(name = "class_type")
     private String classType;
+    
     private String status;
 
     // Getter ve Setterlar
