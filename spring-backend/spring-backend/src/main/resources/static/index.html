@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Havayolu Rezervasyon Sistemi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+            background-image: url('uçak2.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .login-container { max-width: 400px; margin: 60px auto; background: #fff; border-radius: 10px; box-shadow: 0 0 10px #ddd; padding: 32px; }
+        .nav-tabs .nav-link.active { background: #0d6efd; color: #fff !important; }
+        .content-section { display: none; } /* Initially hide all content sections */
+        .container-main { max-width: 900px; margin: 40px auto; } /* margin-top: 40px; ile birlikte yatayda ortala */
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="mainNav" style="display: none;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Havayolu Sistemi</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item customer-only"><a class="nav-link" href="#" data-section="flights">Uçuşlar</a></li>
+                    <li class="nav-item customer-only"><a class="nav-link" href="#" data-section="dashboard">Müşteri Paneli</a></li>
+                    <li class="nav-item admin-only" style="display: none;"><a class="nav-link" href="#" data-section="admin-panel">Admin Paneli</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="logoutBtn">Çıkış</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="loginRegisterSection" class="login-container">
+        <ul class="nav nav-tabs mb-3" id="tabMenu" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Giriş Yap</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">Kayıt Ol</button>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="login" role="tabpanel">
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="loginEmail" class="form-label">E-posta</label>
+                        <input type="email" class="form-control" id="loginEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">Şifre</label>
+                        <input type="password" class="form-control" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="register" role="tabpanel">
+                <form id="registerForm">
+                    <div class="mb-3">
+                        <label for="registerName" class="form-label">Ad Soyad</label>
+                        <input type="text" class="form-control" id="registerName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="registerEmail" class="form-label">E-posta</label>
+                        <input type="email" class="form-control" id="registerEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="registerPassword" class="form-label">Şifre</label>
+                        <input type="password" class="form-control" id="registerPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="registerRole" class="form-label">Rol</label>
+                        <select class="form-select" id="registerRole" required>
+                            <option value="customer">Müşteri</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Kayıt Ol</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="flightsSection" class="container-main bg-white p-4 rounded shadow content-section">
+        <h2 class="mb-4">Uçuşlar</h2>
+        <form class="row g-3 mb-4" id="searchForm">
+            <div class="col-md-4">
+                <input type="text" class="form-control" id="departure" placeholder="Kalkış Şehri">
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" id="destination" placeholder="Varış Şehri">
+            </div>
+            <div class="col-md-4">
+                <input type="date" class="form-control" id="date">
+            </div>
+            <div class="col-12 text-end">
+                <button type="submit" class="btn btn-primary">Ara</button>
+            </div>
+        </form>
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Havayolu</th>
+                    <th>Kalkış</th>
+                    <th>Varış</th>
+                    <th>Tarih</th>
+                    <th>Saat</th>
+                    <th>Fiyat</th>
+                    <th>Koltuk</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="flightsTable">
+                <!-- Örnek veri ile doldurulacak -->
+            </tbody>
+        </table>
+    </div>
+
+    <div id="dashboardSection" class="container-main bg-white p-4 rounded shadow content-section">
+        <h2 class="mb-4">Rezervasyonlarım</h2>
+        <table class="table table-bordered table-hover mb-5">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Uçuş</th>
+                    <th>Tarih</th>
+                    <th>Durum</th>
+                    <th>Ödeme Durumu</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="bookingsTable">
+                <!-- Örnek veri ile doldurulacak -->
+            </tbody>
+        </table>
+        <h2 class="mb-4">Biletlerim</h2>
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Uçuş</th>
+                    <th>Koltuk</th>
+                    <th>Sınıf</th>
+                    <th>Durum</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="ticketsTable">
+                <!-- Örnek veri ile doldurulacak -->
+            </tbody>
+        </table>
+    </div>
+
+    <div id="adminPanelSection" class="container-main bg-white p-4 rounded shadow content-section">
+        <h2 class="mb-4">Admin Paneli</h2>
+        <ul class="nav nav-tabs" id="adminTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="admin-flights-tab" data-bs-toggle="tab" data-bs-target="#admin-flights" type="button" role="tab">Uçuş Yönetimi</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="admin-users-tab" data-bs-toggle="tab" data-bs-target="#admin-users" type="button" role="tab">Kullanıcılar</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="admin-reports-tab" data-bs-toggle="tab" data-bs-target="#admin-reports" type="button" role="tab">Raporlar</button>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="admin-flights" role="tabpanel">
+                <h3 class="mt-3">Uçuşlar</h3>
+                <button class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addFlightModal">Uçuş Ekle</button>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Havayolu</th>
+                            <th>Kalkış</th>
+                            <th>Varış</th>
+                            <th>Tarih</th>
+                            <th>Saat</th>
+                            <th>Fiyat</th>
+                            <th>Koltuk</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminFlightsTable">
+                        <!-- Admin uçuş verileri buraya gelecek -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="admin-users" role="tabpanel">
+                <h3 class="mt-3">Kullanıcılar</h3>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Ad Soyad</th>
+                            <th>E-posta</th>
+                            <th>Rol</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminUsersTable">
+                        <!-- Admin kullanıcı verileri buraya gelecek -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="admin-reports" role="tabpanel">
+                <h3 class="mt-3">Raporlar</h3>
+                <ul class="list-group">
+                    <li class="list-group-item">Toplam Satış: <span id="totalSales">0</span> TL</li>
+                    <li class="list-group-item">Toplam Rezervasyon: <span id="totalBookings">0</span></li>
+                    <li class="list-group-item">Ortalama Doluluk: <span id="avgOccupancy">0</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Uçuş Ekle Modal -->
+    <div class="modal fade" id="addFlightModal" tabindex="-1" aria-labelledby="addFlightModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addFlightModalLabel">Uçuş Ekle</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="addFlightForm">
+              <div class="mb-2"><input type="text" class="form-control" id="flightAirline" placeholder="Havayolu" required></div>
+              <div class="mb-2"><input type="text" class="form-control" id="flightDeparture" placeholder="Kalkış" required></div>
+              <div class="mb-2"><input type="text" class="form-control" id="flightDestination" placeholder="Varış" required></div>
+              <div class="mb-2"><input type="date" class="form-control" id="flightDate" required></div>
+              <div class="mb-2"><input type="time" class="form-control" id="flightTime" required></div>
+              <div class="mb-2"><input type="number" class="form-control" id="flightPrice" placeholder="Fiyat" required></div>
+              <div class="mb-2"><input type="number" class="form-control" id="flightSeats" placeholder="Koltuk" required></div>
+              <button type="submit" class="btn btn-success w-100">Ekle</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rezervasyon Yap Modal -->
+    <div class="modal fade" id="makeReservationModal" tabindex="-1" aria-labelledby="makeReservationModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="makeReservationModalLabel">Rezervasyon Yap</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="confirmReservationForm">
+              <input type="hidden" id="modalFlightID">
+              <div class="mb-3">
+                <label for="seatNumberInput" class="form-label">Koltuk Numarası</label>
+                <input type="text" class="form-control" id="seatNumberInput" required>
+              </div>
+              <div class="mb-3">
+                <label for="classTypeInput" class="form-label">Sınıf Tipi</label>
+                <select class="form-select" id="classTypeInput" required>
+                    <option value="Economy">Ekonomi</option>
+                    <option value="Business">Business</option>
+                    <option value="First Class">First Class</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Rezervasyon Yap</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE_URL = 'http://localhost:8090/api';
+
+        // Helper function to show/hide sections
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        // Handle navigation clicks
+        document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.dataset.section;
+                if (section) {
+                    showSection(section + 'Section'); // e.g., 'flights' -> 'flightsSection'
+                    if (section === 'flights') {
+                        fetchFlights(); // Refresh flights when flights section is shown
+                    } else if (section === 'dashboard') {
+                        fetchBookings(); // Refresh bookings when dashboard is shown
+                        fetchTickets(); // Refresh tickets when dashboard is shown
+                    }
+                }
+            });
+        });
+
+        // Check user session on load
+        function checkSession() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                document.getElementById('loginRegisterSection').style.display = 'none';
+                document.getElementById('mainNav').style.display = 'flex';
+                if (user.role === 'admin') {
+                    document.querySelectorAll('.customer-only').forEach(el => el.style.display = 'none');
+                    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+                    showSection('adminPanelSection'); // Show admin panel for admin
+                    fetchAdminFlights(); // Load admin flights immediately
+                    fetchUsers(); // Load admin users immediately
+                    fetchReports(); // Load admin reports immediately
+                } else {
+                    document.querySelectorAll('.customer-only').forEach(el => el.style.display = 'block');
+                    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+                    showSection('flightsSection'); // Show flights for customer
+                    fetchFlights(); // Load flights immediately
+                }
+            } else {
+                document.getElementById('loginRegisterSection').style.display = 'block';
+                document.getElementById('mainNav').style.display = 'none';
+                showSection('loginRegisterSection'); // Show login/register for logged out
+            }
+        }
+
+        // Logout function
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('user');
+            checkSession();
+        });
+
+        // Login Form Submission
+        document.getElementById('loginForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const res = await fetch(`${API_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            if (res.ok) {
+                const user = await res.json();
+                localStorage.setItem('user', JSON.stringify(user));
+                checkSession(); // Update UI based on new session
+                window.history.replaceState({}, '', '/'); // Force URL to root
+            } else {
+                alert('Giriş başarısız!');
+            }
+        };
+
+        // Register Form Submission
+        document.getElementById('registerForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const role = document.getElementById('registerRole').value;
+            const res = await fetch(`${API_BASE_URL}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password, role })
+            });
+            if (res.ok) {
+                alert('Kayıt başarılı! Giriş yapabilirsiniz.');
+                document.getElementById('login-tab').click(); // Switch to login tab
+            } else {
+                const msg = await res.text();
+                alert(msg);
+            }
+        };
+
+        // API calls for Flights Section
+        async function fetchFlights() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/flights`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const flights = await response.json();
+                renderFlights(flights);
+            } catch (error) {
+                console.error('Uçuşlar yüklenirken hata oluştu:', error);
+                alert('Uçuşlar yüklenirken bir hata oluştu. Konsolu kontrol edin.');
+            }
+        }
+
+        function renderFlights(list) {
+            const tbody = document.getElementById('flightsTable');
+            tbody.innerHTML = '';
+            list.forEach(f => {
+                tbody.innerHTML += `<tr>
+                    <td>${f.flightID}</td>
+                    <td>${f.airline}</td>
+                    <td>${f.departure}</td>
+                    <td>${f.destination}</td>
+                    <td>${f.date}</td>
+                    <td>${f.time}</td>
+                    <td>${f.price} TL</td>
+                    <td>${f.seatsAvailable}</td>
+                    <td><button class='btn btn-success btn-sm' onclick='makeReservation(${f.flightID})'>Rezervasyon</button></td>
+                </tr>`;
+            });
+        }
+
+        async function makeReservation(flightID) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) { alert('Lütfen giriş yapın!'); return; }
+
+            // Set the flight ID in the modal's hidden input
+            document.getElementById('modalFlightID').value = flightID;
+
+            // Show the reservation modal
+            var reservationModal = new bootstrap.Modal(document.getElementById('makeReservationModal'));
+            reservationModal.show();
+        }
+
+        document.getElementById('confirmReservationForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const user = JSON.parse(localStorage.getItem('user'));
+            const flightID = document.getElementById('modalFlightID').value;
+            const seatNumber = document.getElementById('seatNumberInput').value;
+            const classType = document.getElementById('classTypeInput').value;
+
+            if (!user) { alert('Lütfen giriş yapın!'); return; }
+
+            const bookingData = {
+                userID: user.userID,
+                flightID: parseInt(flightID),
+                paymentStatus: 'Paid',
+                bookingDate: new Date().toISOString().slice(0,10),
+                seatNumber: seatNumber, // Add seat number
+                classType: classType   // Add class type
+            };
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/bookings`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bookingData)
+                });
+                if (res.ok) {
+                    alert('Rezervasyon başarılı!');
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('makeReservationModal'));
+                    if (modal) modal.hide();
+                    e.target.reset();
+                    showSection('dashboardSection'); // Redirect to dashboard
+                    fetchBookings(); // Refresh bookings
+                    fetchTickets(); // Refresh tickets
+                } else {
+                    const errorText = await res.text();
+                    alert(`Rezervasyon başarısız! Hata: ${errorText}`);
+                }
+            } catch (error) {
+                console.error('Rezervasyon yapılırken hata oluştu:', error);
+                alert('Rezervasyon yapılırken bir hata oluştu. Konsolu kontrol edin.');
+            }
+        };
+
+        document.getElementById('searchForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const dep = document.getElementById('departure').value.toLowerCase();
+            const dest = document.getElementById('destination').value.toLowerCase();
+            const date = document.getElementById('date').value;
+            const response = await fetch(`${API_BASE_URL}/flights`); // Fetch all flights to filter
+            const flights = await response.json();
+            const filtered = flights.filter(f =>
+                (dep === '' || f.departure.toLowerCase().includes(dep)) &&
+                (dest === '' || f.destination.toLowerCase().includes(dest)) &&
+                (date === '' || f.date === date)
+            );
+            renderFlights(filtered);
+        };
+
+
+        // API calls for Dashboard Section
+        async function fetchBookings() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || user.role !== 'customer') { return; } // Ensure user is customer
+            try {
+                const res = await fetch(`${API_BASE_URL}/bookings/user/${user.userID}`);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                const bookings = await res.json();
+                renderBookings(bookings);
+            } catch (error) {
+                console.error('Rezervasyonlar yüklenirken hata oluştu:', error);
+                alert('Rezervasyonlar yüklenirken bir hata oluştu. Konsolu kontrol edin.');
+            }
+        }
+
+        function renderBookings(list) {
+            const tbody = document.getElementById('bookingsTable');
+            tbody.innerHTML = '';
+            list.forEach(b => {
+                tbody.innerHTML += `<tr>
+                    <td>${b.bookingID}</td>
+                    <td>${b.flightID}</td>
+                    <td>${b.bookingDate}</td>
+                    <td>${b.paymentStatus}</td>
+                    <td>${b.paymentStatus === 'Paid' ? `<button class='btn btn-danger btn-sm' onclick='cancelBooking(${b.bookingID})'>İptal</button>` : ''}</td>
+                </tr>`;
+            });
+        }
+
+        async function cancelBooking(bookingID) {
+            if (!confirm('Rezervasyonu iptal etmek istediğinize emin misiniz?')) return;
+            const res = await fetch(`${API_BASE_URL}/bookings/cancel/${bookingID}`, { method: 'PUT' });
+            if (res.ok) {
+                alert('Rezervasyon iptal edildi!');
+                fetchBookings(); // Refresh bookings
+            } else {
+                alert('İptal işlemi başarısız!');
+            }
+        }
+
+        async function fetchTickets() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || user.role !== 'customer') { return; } // Ensure user is customer
+            try {
+                const res = await fetch(`${API_BASE_URL}/bookings/user/${user.userID}`);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                const bookings = await res.json();
+                let allTickets = [];
+                for (const b of bookings) {
+                    const tRes = await fetch(`${API_BASE_URL}/tickets/booking/${b.bookingID}`);
+                    if (!tRes.ok) {
+                        throw new Error(`HTTP error! status: ${tRes.status}`);
+                    }
+                    const tickets = await tRes.json();
+                    allTickets = allTickets.concat(tickets);
+                }
+                renderTickets(allTickets);
+            } catch (error) {
+                console.error('Biletler yüklenirken hata oluştu:', error);
+                alert('Biletler yüklenirken bir hata oluştu. Konsolu kontrol edin.');
+            }
+        }
+
+        function renderTickets(list) {
+            const tbody = document.getElementById('ticketsTable');
+            tbody.innerHTML = '';
+            list.forEach(t => {
+                tbody.innerHTML += `<tr>
+                    <td>${t.ticketID}</td>
+                    <td>${t.bookingID}</td>
+                    <td>${t.seatNumber || ''}</td>
+                    <td>${t.classType || ''}</td>
+                    <td>${t.status}</td>
+                    <td>${t.status === 'Confirmed' ? `<button class='btn btn-success btn-sm' onclick='checkIn(${t.ticketID})'>Check-in</button>` : ''}</td>
+                </tr>`;
+            });
+        }
+
+        async function checkIn(ticketID) {
+            const res = await fetch(`${API_BASE_URL}/tickets/checkin/${ticketID}`, { method: 'PUT' });
+            if (res.ok) {
+                alert('Check-in tamamlandı!');
+                fetchTickets(); // Refresh tickets
+            } else {
+                alert('Check-in başarısız!');
+            }
+        }
+
+        // API calls for Admin Section
+        async function fetchAdminFlights() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/flights`);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                const flights = await res.json();
+                renderAdminFlights(flights);
+            } catch (error) {
+                console.error('Admin uçuşları yüklenirken hata oluştu:', error);
+                alert('Admin uçuşları yüklenirken bir hata oluştu. Konsolu kontrol edin.');
+            }
+        }
+        function renderAdminFlights(list) {
+            const tbody = document.getElementById('adminFlightsTable');
+            tbody.innerHTML = '';
+            list.forEach(f => {
+                tbody.innerHTML += `<tr>
+                    <td>${f.flightID}</td>
+                    <td>${f.airline}</td>
+                    <td>${f.departure}</td>
+                    <td>${f.destination}</td>
+                    <td>${f.date}</td>
+                    <td>${f.time}</td>
+                    <td>${f.price} TL</td>
+                    <td>${f.seatsAvailable}</td>
+                    <td><button class='btn btn-danger btn-sm' onclick='deleteFlight(${f.flightID})'>Sil</button></td>
+                </tr>`;
+            });
+        }
+        async function deleteFlight(flightID) {
+            if (!confirm('Uçuşu silmek istediğinize emin misiniz?')) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/flights/${flightID}`, { method: 'DELETE' });
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                fetchAdminFlights();
+            } catch (error) {
+                console.error('Silme işlemi başarısız oldu:', error);
+                alert('Silme işlemi başarısız oldu. Konsolu kontrol edin.');
+            }
+        }
+        document.getElementById('addFlightForm').onsubmit = async function(e) {
+            e.preventDefault();
+            // Input fields are now retrieved by their IDs for clarity and robustness
+            const flight = {
+                airline: document.getElementById('flightAirline').value,
+                departure: document.getElementById('flightDeparture').value,
+                destination: document.getElementById('flightDestination').value,
+                date: document.getElementById('flightDate').value,
+                time: document.getElementById('flightTime').value,
+                price: parseFloat(document.getElementById('flightPrice').value),
+                seatsAvailable: parseInt(document.getElementById('flightSeats').value)
+            };
+            try {
+                const res = await fetch(`${API_BASE_URL}/flights`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(flight)
+                });
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    throw new Error(`HTTP error! status: ${res.status}, ${errorText}`);
+                }
+                fetchAdminFlights();
+                var modal = bootstrap.Modal.getInstance(document.getElementById('addFlightModal'));
+                if (modal) modal.hide();
+                e.target.reset();
+            } catch (error) {
+                console.error('Uçuş ekleme başarısız:', error);
+                alert(`Uçuş ekleme başarısız! Hata: ${error.message}. Konsolu kontrol edin.`);
+            }
+        };
+        async function fetchUsers() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/users`);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                const users = await res.json();
+                renderAdminUsers(users);
+            } catch (error) {
+                console.error('Kullanıcılar yüklenirken hata oluştu:', error);
+                alert('Kullanıcılar yüklenirken bir hata oluştu. Konsolu kontrol edin.');
+            }
+        }
+        function renderAdminUsers(list) {
+            const tbody = document.getElementById('adminUsersTable');
+            tbody.innerHTML = '';
+            list.forEach(u => {
+                tbody.innerHTML += `<tr>
+                    <td>${u.userID}</td>
+                    <td>${u.name}</td>
+                    <td>${u.email}</td>
+                    <td>${u.role}</td>
+                    <td><button class='btn btn-danger btn-sm' onclick='deleteUser(${u.userID})'>Sil</button></td>
+                </tr>`;
+            });
+        }
+        async function deleteUser(userID) {
+            if (!confirm('Kullanıcıyı silmek istediğinize emin misiniz?')) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/users/${userID}`, { method: 'DELETE' });
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                fetchUsers();
+            } catch (error) {
+                console.error('Kullanıcı silme işlemi başarısız oldu:', error);
+                alert('Kullanıcı silme işlemi başarısız oldu. Konsolu kontrol edin.');
+            }
+        }
+        async function fetchReports() {
+            try {
+                const res = await fetch(`${API_BASE_URL}/reports`);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                const data = await res.json();
+                document.getElementById('totalSales').innerText = data.totalSales;
+                document.getElementById('totalBookings').innerText = data.totalBookings;
+                document.getElementById('avgOccupancy').innerText = data.avgOccupancy;
+            } catch (error) {
+                console.error('Raporlar yüklenirken hata oluştu:', error);
+                alert('Raporlar yüklenirken bir hata oluştu. Konsolu kontrol edin.');
+            }
+        }
+
+        // Handle admin tab clicks to fetch data
+        document.getElementById('adminTab').addEventListener('shown.bs.tab', function (e) {
+            const targetId = e.target.dataset.bsTarget;
+            if (targetId === '#admin-flights') {
+                fetchAdminFlights();
+            } else if (targetId === '#admin-users') {
+                fetchUsers();
+            } else if (targetId === '#admin-reports') {
+                fetchReports();
+            }
+        });
+
+        // Initial check when page loads
+        document.addEventListener('DOMContentLoaded', checkSession);
+
+    </script>
+</body>
+</html> 
