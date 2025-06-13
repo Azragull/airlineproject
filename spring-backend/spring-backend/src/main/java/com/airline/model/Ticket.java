@@ -7,7 +7,9 @@ import jakarta.persistence.*;
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ticket_id")
     private Long ticketID;
+    @Column(name = "booking_id")
     private Long bookingID;
     private String seatNumber;
     

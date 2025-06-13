@@ -9,12 +9,13 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "payment_id")
     private int paymentId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "booking_id")
     private int bookingId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "user_id")
     private int userId;
 
     @Column(nullable = false)

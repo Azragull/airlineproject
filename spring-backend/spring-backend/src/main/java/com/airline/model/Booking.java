@@ -7,8 +7,11 @@ import jakarta.persistence.*;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "booking_id")
     private Long bookingID;
+    @Column(name = "user_id")
     private Long userID;
+    @Column(name = "flight_id")
     private Long flightID;
     private String paymentStatus;
     private String bookingDate;

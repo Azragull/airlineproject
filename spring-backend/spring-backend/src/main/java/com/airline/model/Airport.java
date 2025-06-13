@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 public class Airport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "airport_id")
     private Long airportID;
     private String name;
     private String location;
