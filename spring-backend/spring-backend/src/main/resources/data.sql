@@ -3,8 +3,7 @@ INSERT INTO users (name, email, password, role) VALUES
 ('Öykü Yüksel', 'oyku@example.com', '2222222', 'customer'),
 ('Azra Gül', 'azra@example.com', '3333333', 'admin'),
 ('Belinay Öz', 'belinay@example.com', '4444444', 'customer'),
-('Ece Uzal', 'ece@example.com', '5555555', 'customer')
-ON CONFLICT (email) DO NOTHING;
+('Ece Uzal', 'ece@example.com', '5555555', 'customer');
 
 INSERT INTO flights (FlightID, Airline, Departure, Destination, Date, Time, Price, seats_available) VALUES
 (1, 'Turkish Airlines', 'Istanbul', 'Berlin', '2025-06-15', '08:30:00', 4500.00, 50),
