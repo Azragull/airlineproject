@@ -16,13 +16,12 @@ INSERT INTO users (name, email, password, role) VALUES
 ('Belinay Öz', 'belinay@example.com', '4444444', 'customer'),
 ('Ece Uzal', 'ece@example.com', '5555555', 'customer');
 
-INSERT INTO flights (FlightID, Airline, Departure, Destination, Date, Time, Price, seats_available) VALUES
+INSERT INTO flights (flight_id, Airline, Departure, Destination, Date, Time, Price, seats_available) VALUES
 (1, 'Turkish Airlines', 'Istanbul', 'Berlin', '2025-06-15', '08:30:00', 4500.00, 50),
 (2, 'Pegasus', 'Ankara', 'Amsterdam', '2025-06-16', '12:00:00', 3200.00, 40),
 (3, 'SunExpress', 'Izmir', 'London', '2025-06-20', '14:00:00', 1100.00, 60),
 (4, 'AnadoluJet', 'Antalya', 'Paris', '2025-06-21', '09:45:00', 2400.00, 45),
-(5, 'Turkish Airlines', 'Istanbul', 'New York', '2025-06-25', '23:00:00', 10500.00, 30)
-ON CONFLICT (FlightID) DO NOTHING;
+(5, 'Turkish Airlines', 'Istanbul', 'New York', '2025-06-25', '23:00:00', 10500.00, 30);
 
 INSERT INTO bookings (BookingID, UserID, FlightID, PaymentStatus, BookingDate) VALUES
 (1, 2, 1, 'Paid', '2025-06-01'),
