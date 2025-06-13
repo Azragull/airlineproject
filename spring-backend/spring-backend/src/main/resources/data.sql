@@ -1,3 +1,14 @@
+DELETE FROM bookings;
+DELETE FROM tickets;
+DELETE FROM users;
+DELETE FROM flights;
+DELETE FROM payments;
+DELETE FROM airports;
+DELETE FROM flight_status;
+DELETE FROM baggage_allowance;
+DELETE FROM seat_classes;
+DELETE FROM passengers;
+
 INSERT INTO users (name, email, password, role) VALUES
 ('Ali Yağız İnce', 'ali@example.com', '1111111', 'admin'),
 ('Öykü Yüksel', 'oyku@example.com', '2222222', 'customer'),
