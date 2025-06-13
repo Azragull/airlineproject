@@ -1,10 +1,10 @@
-INSERT INTO users (userID, name, email, password, role) VALUES
-(1, 'Ali Yağız İnce', 'ali@example.com', '1111111', 'admin'),
-(2, 'Öykü Yüksel', 'oyku@example.com', '2222222', 'customer'),
-(3, 'Azra Gül', 'azra@example.com', '3333333', 'admin'),
-(4, 'Belinay Öz', 'belinay@example.com', '4444444', 'customer'),
-(5, 'Ece Uzal', 'ece@example.com', '5555555', 'customer')
-ON CONFLICT (userID) DO NOTHING;
+INSERT INTO users (name, email, password, role) VALUES
+('Ali Yağız İnce', 'ali@example.com', '1111111', 'admin'),
+('Öykü Yüksel', 'oyku@example.com', '2222222', 'customer'),
+('Azra Gül', 'azra@example.com', '3333333', 'admin'),
+('Belinay Öz', 'belinay@example.com', '4444444', 'customer'),
+('Ece Uzal', 'ece@example.com', '5555555', 'customer')
+ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO flights (FlightID, Airline, Departure, Destination, Date, Time, Price, seats_available) VALUES
 (1, 'Turkish Airlines', 'Istanbul', 'Berlin', '2025-06-15', '08:30:00', 4500.00, 50),
