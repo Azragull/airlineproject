@@ -28,61 +28,53 @@ INSERT INTO bookings (BookingID, UserID, FlightID, PaymentStatus, BookingDate) V
 (2, 3, 2, 'Pending', '2025-06-01'),
 (3, 4, 3, 'Paid', '2025-06-02'),
 (4, 5, 4, 'Cancelled', '2025-06-03'),
-(5, 2, 5, 'Paid', '2025-06-04')
-ON CONFLICT (BookingID) DO NOTHING;
+(5, 2, 5, 'Paid', '2025-06-04');
 
 INSERT INTO payments (PaymentID, BookingID, UserID, Amount, Status, PaymentMethod) VALUES
 (1, 1, 2, 1500.00, 'Completed', 'Credit Card'),
 (2, 2, 3, 1200.00, 'Pending', 'PayPal'),
 (3, 3, 4, 1100.00, 'Completed', 'Bank Transfer'),
 (4, 4, 5, 1300.00, 'Failed', 'Credit Card'),
-(5, 5, 2, 3500.00, 'Completed', 'PayPal')
-ON CONFLICT (PaymentID) DO NOTHING;
+(5, 5, 2, 3500.00, 'Completed', 'PayPal');
 
 INSERT INTO airports (AirportID, Name, Location, Code) VALUES
 (1, 'Istanbul Airport', 'Istanbul', 'IST'),
 (2, 'Berlin Brandenburg', 'Berlin', 'BER'),
 (3, 'Amsterdam Schiphol', 'Amsterdam', 'AMS'),
 (4, 'London Heathrow', 'London', 'LHR'),
-(5, 'John F. Kennedy Airport', 'New York', 'JFK')
-ON CONFLICT (AirportID) DO NOTHING;
+(5, 'John F. Kennedy Airport', 'New York', 'JFK');
 
 INSERT INTO tickets (TicketID, BookingID, SeatNumber, class_type, Status) VALUES
 (1, 1, '12A', 'Economy', 'Confirmed'),
 (2, 2, '15B', 'Business', 'Reserved'),
 (3, 3, '21C', 'Economy', 'Confirmed'),
 (4, 4, '10D', 'First Class', 'Cancelled'),
-(5, 5, '5E', 'Business', 'Confirmed')
-ON CONFLICT (TicketID) DO NOTHING;
+(5, 5, '5E', 'Business', 'Confirmed');
 
 INSERT INTO passengers (PassengerID, BookingID, Name, Age, PassportNumber) VALUES
 (1, 1, 'Öykü Yüksel', 22, 'P12345678'),
 (2, 2, 'Azra Gül', 21, 'P87654321'),
 (3, 3, 'Belinay Öz', 30, 'P34567891'),
 (4, 4, 'Ece Uzal', 28, 'P98765432'),
-(5, 5, 'Ali Yağız İnce', 25, 'P19283746')
-ON CONFLICT (PassengerID) DO NOTHING;
+(5, 5, 'Ali Yağız İnce', 25, 'P19283746');
 
 INSERT INTO flight_status (StatusID, FlightID, DepartureTime, ArrivalTime, Status) VALUES
 (1, 1, '08:30:00', '11:00:00', 'On Time'),
 (2, 2, '12:00:00', '14:30:00', 'Delayed'),
 (3, 3, '14:00:00', '16:30:00', 'On Time'),
 (4, 4, '09:45:00', '12:15:00', 'On Time'),
-(5, 5, '23:00:00', '06:30:00', 'Cancelled')
-ON CONFLICT (StatusID) DO NOTHING;
+(5, 5, '23:00:00', '06:30:00', 'Cancelled');
 
 INSERT INTO baggage_allowance (BaggageID, FlightID, AllowedWeight, ExtraChargePerKg) VALUES
 (1, 1, 20, 15.00),
 (2, 2, 15, 20.00),
 (3, 3, 23, 18.00),
 (4, 4, 20, 17.00),
-(5, 5, 25, 25.00)
-ON CONFLICT (BaggageID) DO NOTHING;
+(5, 5, 25, 25.00);
 
 INSERT INTO seat_classes (ClassID, FlightID, ClassType, PriceMultiplier) VALUES
 (1, 1, 'Economy', 1.0),
 (2, 1, 'Business', 1.5),
 (3, 2, 'Economy', 1.0),
 (4, 2, 'First Class', 2.0),
-(5, 3, 'Business', 1.8)
-ON CONFLICT (ClassID) DO NOTHING; 
+(5, 3, 'Business', 1.8); 
