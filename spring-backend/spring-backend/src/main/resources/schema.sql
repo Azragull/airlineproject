@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS bookings (
     payment_status VARCHAR(255) NOT NULL,
     booking_date VARCHAR(255) NOT NULL,
     seat_number VARCHAR(255),
-    class_type VARCHAR(255)
+    class_type VARCHAR(255),
+    UNIQUE (flight_id, seat_number)
 );
 
 CREATE TABLE IF NOT EXISTS payments (
