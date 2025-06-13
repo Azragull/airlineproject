@@ -228,14 +228,35 @@
           </div>
           <div class="modal-body">
             <form id="addFlightForm">
-              <div class="mb-2"><input type="text" class="form-control" id="flightAirline" placeholder="Havayolu" required></div>
-              <div class="mb-2"><input type="text" class="form-control" id="flightDeparture" placeholder="Kalkış" required></div>
-              <div class="mb-2"><input type="text" class="form-control" id="flightDestination" placeholder="Varış" required></div>
-              <div class="mb-2"><input type="date" class="form-control" id="flightDate" required></div>
-              <div class="mb-2"><input type="time" class="form-control" id="flightTime" required></div>
-              <div class="mb-2"><input type="number" class="form-control" id="flightPrice" placeholder="Fiyat" required></div>
-              <div class="mb-2"><input type="number" class="form-control" id="flightSeats" placeholder="Koltuk" required></div>
-              <button type="submit" class="btn btn-success w-100">Ekle</button>
+                <div class="mb-3">
+                    <label for="flightAirline" class="form-label">Havayolu</label>
+                    <input type="text" class="form-control" id="flightAirline" required>
+                </div>
+                <div class="mb-3">
+                    <label for="flightDeparture" class="form-label">Kalkış</label>
+                    <input type="text" class="form-control" id="flightDeparture" required>
+                </div>
+                <div class="mb-3">
+                    <label for="flightDestination" class="form-label">Varış</label>
+                    <input type="text" class="form-control" id="flightDestination" required>
+                </div>
+                <div class="mb-3">
+                    <label for="flightDate" class="form-label">Tarih</label>
+                    <input type="date" class="form-control" id="flightDate" required>
+                </div>
+                <div class="mb-3">
+                    <label for="flightTime" class="form-label">Saat</label>
+                    <input type="time" class="form-control" id="flightTime" required>
+                </div>
+                <div class="mb-3">
+                    <label for="flightPrice" class="form-label">Fiyat</label>
+                    <input type="number" class="form-control" id="flightPrice" required min="0" step="0.01">
+                </div>
+                <div class="mb-3">
+                    <label for="flightSeats" class="form-label">Boş Koltuk Sayısı</label>
+                    <input type="number" class="form-control" id="flightSeats" required min="0">
+                </div>
+                <button type="submit" class="btn btn-primary">Uçuş Ekle</button>
             </form>
           </div>
         </div>
@@ -258,14 +279,14 @@
                 <input type="text" class="form-control" id="seatNumberInput" required>
               </div>
               <div class="mb-3">
-                <label for="classTypeInput" class="form-label">Sınıf Tipi</label>
-                <select class="form-select" id="classTypeInput" required>
+                <label for="classTypeInput" class="form-label">Sınıf</label>
+                <select class="form-control" id="classTypeInput" required>
                     <option value="Economy">Ekonomi</option>
                     <option value="Business">Business</option>
-                    <option value="First Class">First Class</option>
+                    <option value="First">First Class</option>
                 </select>
               </div>
-              <button type="submit" class="btn btn-primary w-100">Rezervasyon Yap</button>
+              <button type="submit" class="btn btn-primary">Rezervasyonu Onayla</button>
             </form>
           </div>
         </div>
@@ -616,7 +637,6 @@
         }
         document.getElementById('addFlightForm').onsubmit = async function(e) {
             e.preventDefault();
-            // Input fields are now retrieved by their IDs for clarity and robustness
             const flight = {
                 airline: document.getElementById('flightAirline').value,
                 departure: document.getElementById('flightDeparture').value,
@@ -626,23 +646,24 @@
                 price: parseFloat(document.getElementById('flightPrice').value),
                 seatsAvailable: parseInt(document.getElementById('flightSeats').value)
             };
+
             try {
                 const res = await fetch(`${API_BASE_URL}/flights`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(flight)
                 });
-                if (!res.ok) {
+                if (res.ok) {
+                    alert('Uçuş başarıyla eklendi!');
+                    document.getElementById('addFlightForm').reset();
+                    fetchAdminFlights();
+                } else {
                     const errorText = await res.text();
-                    throw new Error(`HTTP error! status: ${res.status}, ${errorText}`);
+                    alert(`Uçuş eklenirken hata oluştu: ${errorText}`);
                 }
-                fetchAdminFlights();
-                var modal = bootstrap.Modal.getInstance(document.getElementById('addFlightModal'));
-                if (modal) modal.hide();
-                e.target.reset();
             } catch (error) {
-                console.error('Uçuş ekleme başarısız:', error);
-                alert(`Uçuş ekleme başarısız! Hata: ${error.message}. Konsolu kontrol edin.`);
+                console.error('Uçuş eklenirken hata oluştu:', error);
+                alert('Uçuş eklenirken bir hata oluştu. Konsolu kontrol edin.');
             }
         };
         async function fetchUsers() {
@@ -690,14 +711,18 @@
                 if (!res.ok) {
                     throw new Error(`HTTP error! status: ${res.status}`);
                 }
-                const data = await res.json();
-                document.getElementById('totalSales').innerText = data.totalSales;
-                document.getElementById('totalBookings').innerText = data.totalBookings;
-                document.getElementById('avgOccupancy').innerText = data.avgOccupancy;
+                const reports = await res.json();
+                renderReports(reports);
             } catch (error) {
                 console.error('Raporlar yüklenirken hata oluştu:', error);
                 alert('Raporlar yüklenirken bir hata oluştu. Konsolu kontrol edin.');
             }
+        }
+
+        function renderReports(reports) {
+            document.getElementById('totalBookings').textContent = reports.totalBookings;
+            document.getElementById('totalSales').textContent = `₺${reports.totalSales.toFixed(2)}`;
+            document.getElementById('avgOccupancy').textContent = `${(100 - reports.avgOccupancy).toFixed(1)}%`;
         }
 
         // Handle admin tab clicks to fetch data
