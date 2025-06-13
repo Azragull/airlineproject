@@ -23,7 +23,7 @@ INSERT INTO flights (flight_id, Airline, Departure, Destination, Date, Time, Pri
 (4, 'AnadoluJet', 'Antalya', 'Paris', '2025-06-21', '09:45:00', 2400.00, 45),
 (5, 'Turkish Airlines', 'Istanbul', 'New York', '2025-06-25', '23:00:00', 10500.00, 30);
 
-INSERT INTO bookings (BookingID, UserID, FlightID, PaymentStatus, BookingDate) VALUES
+INSERT INTO bookings (bookingid, UserID, FlightID, PaymentStatus, BookingDate) VALUES
 (1, 2, 1, 'Paid', '2025-06-01'),
 (2, 3, 2, 'Pending', '2025-06-01'),
 (3, 4, 3, 'Paid', '2025-06-02'),
